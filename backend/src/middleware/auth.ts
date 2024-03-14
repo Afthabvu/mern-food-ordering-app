@@ -19,11 +19,16 @@ export const jwtCheck = auth({
   });
 
   export const jwtParse=async(req:Request,res:Response,next:NextFunction)=>{
+    // console.log(req.body)
+    // console.log(req.headers)
     const {authorization}= req.headers;
-    if(!authorization||!authorization.startsWith("Bearer  ")){
+    // console.log(authorization)
+    if(!authorization || !authorization.startsWith("Bearer ")){
+      // console.log("entered error")
       return res.sendStatus(401);
     }
     const token = authorization.split(" ")[1];
+    // console.log(token)
 
     try {
       const decoded=jwt.decode(token) as jwt.JwtPayload;
