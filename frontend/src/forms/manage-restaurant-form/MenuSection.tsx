@@ -34,6 +34,7 @@ const MenuSection=()=>{
                 <Button 
                     type="button"
                     onClick={()=>append({name:"",price:""})}
+                    className="mt-5"
                 
                 >Add Menu Item</Button>
             </div>
