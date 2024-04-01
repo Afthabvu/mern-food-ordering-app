@@ -1,3 +1,4 @@
+import { useCreateMyRestaurant } from "@/api/MyRestaurantApi";
 import ManageRestaurantForm from "@/forms/manage-restaurant-form/ManageRestaurantForm";
 
 
@@ -10,8 +11,9 @@ import ManageRestaurantForm from "@/forms/manage-restaurant-form/ManageRestauran
 
 
 const ManageRestaurantPage=()=>{
+    const{createRestaurant,isLoading}=useCreateMyRestaurant();
     return(
-        <ManageRestaurantForm/>
+        <ManageRestaurantForm onSave={createRestaurant} isLoading={isLoading}/>
     )
 
 }

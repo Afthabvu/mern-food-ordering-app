@@ -3,12 +3,14 @@ import cors from 'cors';
 import "dotenv/config";
 import mongoose from 'mongoose';
 import myUserRoute from './routes/myUserRoute';
-import myRestaurantRoute from './routes/myRestaurantRoute'
+import myRestaurantRoute from './routes/myRestaurantRoute';
 import { v2 as cloudinary } from 'cloudinary';
+
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).then(()=>{
     console.log('connected to mongodb')
 })
+
 
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
@@ -26,7 +28,7 @@ app.get("/health",async(req:Request,res:Response)=>{
 })
 
 app.use("/api/my/user",myUserRoute);
-app.use("api/my/restaurant",myRestaurantRoute)
+app.use("/api/my/restaurant",myRestaurantRoute);
 
 app.listen(7000,()=>{
     console.log("server started on PORT 7000")
