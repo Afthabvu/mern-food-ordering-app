@@ -32,7 +32,7 @@ import {z} from 'zod'
     })
 
     useEffect(()=>{
-        form.reset(currentUser)
+        form.reset(currentUser);
 
     },[currentUser,form])
 
