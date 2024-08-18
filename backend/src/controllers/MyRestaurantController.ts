@@ -11,7 +11,7 @@ const getMyRestaurant = async (req: Request, res: Response) => {
     }
     res.json(restaurant);
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
     res.status(500).json({ message: "error fetching restaurant" });
   }
 };
@@ -38,6 +38,7 @@ const createMyRestaurant = async (req: Request, res: Response) => {
 };
 
 const updateMyRestaurant = async (req: Request, res: Response) => {
+  console.log("Hello from updateRestaurant")
   try {
     const restaurant = await Restaurant.findOne({ user: req.userId });
     if (!restaurant) {

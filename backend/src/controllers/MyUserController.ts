@@ -15,7 +15,7 @@ const createCurrentUser=async( req:Request,res:Response)=>{
         await newUser.save();
         res.status(201).json(newUser.toObject())
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({message:"Error creating user"})
         
     }
@@ -39,7 +39,7 @@ const updateCurrentUser=async(req:Request,res:Response)=>{
         await user.save();
         res.send(user);
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({message:"Error updating user"})
         
     }
@@ -55,7 +55,7 @@ const getCurrentUser=async(req:Request,res:Response)=>{
 
         res.json(currentUser)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         res.status(500).json({message:"something went wrong"})
         
     }
