@@ -20,7 +20,7 @@ type Props = {
   onReset?: () => void;
 };
 
-const Searchbar = ({ onSubmit, onReset, placeHolder }: Props) => {
+const SearchBar = ({ onSubmit, onReset, placeHolder }: Props) => {
   const form = useForm<SearchForm>({
     resolver: zodResolver(formSchema),
   });
@@ -79,4 +79,4 @@ const Searchbar = ({ onSubmit, onReset, placeHolder }: Props) => {
   );
 };
 
-export default Searchbar;
+export default SearchBar;
