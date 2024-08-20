@@ -41,7 +41,7 @@ const CuisineFilter = ({
         {cuisineList.slice(0,isExpanded?cuisineList.length:7).map((cuisine) => {
           const isSelected = selectedCuisines.includes(cuisine);
           return (
-            <div className="flex">
+            <div className="flex" key={cuisine}>
               <input
                 type="checkbox"
                 id={`cuisine_${cuisine}`}

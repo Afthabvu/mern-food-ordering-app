@@ -13,12 +13,18 @@ export const useGetRestaurant = (restaurantId?: string) => {
       throw new Error("Failed to get restaurant");
     }
     return response.json();
-
   };
-  const {data:restaurant,isLoading}=useQuery("fetchRestaurant",getRestaurantByIdRequest)
-  return{
-    restaurant,isLoading
-  }
+  const { data: restaurant, isLoading } = useQuery(
+    "fetchRestaurant",
+    getRestaurantByIdRequest,{
+      enabled:!!restaurantId
+    }
+
+  );
+  return {
+    restaurant,
+    isLoading,
+  };
 };
 
 export const useSearchRestaurants = (
