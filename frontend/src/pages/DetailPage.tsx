@@ -1,9 +1,11 @@
 import { useGetRestaurant } from "@/api/RestaurantApi";
+import CheckoutButton from "@/components/CheckoutButton";
 import MenuItem from "@/components/MenuItem";
 import OrderSummary from "@/components/OrderSummary";
 import RestaurantInfo from "@/components/RestaurantInfo";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Card } from "@/components/ui/card";
+import { Card, CardFooter } from "@/components/ui/card";
+import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { MenuItems } from "@/types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -18,7 +20,10 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
   const addToCart = (menuItem: MenuItems) => {
     setCartItems((prevCartItems) => {
       const existingCartItem = prevCartItems.find(
@@ -42,6 +47,10 @@ const DetailPage = () => {
           },
         ];
       }
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
       return updatedCartItems;
     });
   };
@@ -52,22 +61,32 @@ const DetailPage = () => {
           ? { ...prevCartItem, quantity: prevCartItem.quantity + 1 }
           : prevCartItem
       );
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
       return updatedCartItems;
     });
   };
   const decrementCart = (cartItem: CartItem) => {
     setCartItems((prevCartItems) => {
-      const updatedCartItems = prevCartItems.map((prevCartItem) => {
-        if (prevCartItem._id === cartItem._id) {
-          if (prevCartItem.quantity > 1) {
-            return { ...prevCartItem, quantity: prevCartItem.quantity - 1 };
+      const updatedCartItems = prevCartItems
+        .map((prevCartItem) => {
+          if (prevCartItem._id === cartItem._id) {
+            if (prevCartItem.quantity > 1) {
+              return { ...prevCartItem, quantity: prevCartItem.quantity - 1 };
+            } else {
+              return null;
+            }
           } else {
-            return null;
+            return prevCartItem;
           }
-        } else {
-          return prevCartItem;
-        }
-      }).filter((prevCartItem)=>prevCartItem!==null);
+        })
+        .filter((prevCartItem) => prevCartItem !== null);
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
       return updatedCartItems;
     });
   };
@@ -76,15 +95,23 @@ const DetailPage = () => {
       const updatedCartItems = prevCartItems.filter(
         (prevCartItem) => prevCartItem._id !== cartItem._id
       );
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
       return updatedCartItems;
     });
   };
+  const onCheckout=(UserFormData:UserFormData)=>{
+    console.log("hi")
+
+  }
   if (isLoading || !restaurant) {
     return "Loading...";
   }
   return (
     <div className="flex flex-col gap-10">
-      <AspectRatio ratio={16 / 7}>
+      <AspectRatio ratio={16 / 9}>
         <img
           src={restaurant.imageUrl}
           className="rounded-md object-cover h-full w-full"
@@ -110,6 +137,9 @@ const DetailPage = () => {
               incrementCart={incrementCart}
               decrementCart={decrementCart}
             />
+            <CardFooter>
+              <CheckoutButton disabled={cartItems.length===0} onCheckout={onCheckout}/>
+            </CardFooter>
           </Card>
         </div>
       </div>
