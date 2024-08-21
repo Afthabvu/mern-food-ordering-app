@@ -3,22 +3,25 @@ import { useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import UserProfileForm, { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
+import UserProfileForm, {
+  UserFormData,
+} from "@/forms/user-profile-form/UserProfileForm";
 import { useGetMyUser } from "@/api/MyUserApi";
 
-type Props={
-    onCheckout:(UserFormData:UserFormData)=>void
-    disabled:boolean
-}
+type Props = {
+  onCheckout: (UserFormData: UserFormData) => void;
+  disabled: boolean;
+  isLoading: boolean;
+};
 
-const CheckoutButton = ({onCheckout,disabled}:Props) => {
+const CheckoutButton = ({ onCheckout, disabled,isLoading }: Props) => {
   const {
     isAuthenticated,
     isLoading: isAuthLoading,
     loginWithRedirect,
   } = useAuth0();
   const { pathname } = useLocation();
-  const { currentUser, isLoading:isGetUserLoading} = useGetMyUser();
+  const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
   const onLogin = async () => {
     await loginWithRedirect({
       appState: {
@@ -36,14 +39,16 @@ const CheckoutButton = ({onCheckout,disabled}:Props) => {
     );
   }
 
-  if (isAuthLoading||!currentUser) {
+  if (isAuthLoading || !currentUser||isLoading) {
     return <LoadingButton />;
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={disabled} className="bg-orange-500 flex-1">Go to checkout</Button>
+        <Button disabled={disabled} className="bg-orange-500 flex-1">
+          Go to checkout
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[425px] md:min-w-[700px] bg-gray-50">
         <UserProfileForm

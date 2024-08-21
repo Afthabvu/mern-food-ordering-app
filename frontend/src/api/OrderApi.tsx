@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { toast } from "sonner";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-type CheckoutSessionRequest = {
+export type CheckoutSessionRequest = {
     cartItems: {
       menuItemId: string;
       name: string;

@@ -1,3 +1,4 @@
+import { useCreateCheckoutSession } from "@/api/OrderApi";
 import { useGetRestaurant } from "@/api/RestaurantApi";
 import CheckoutButton from "@/components/CheckoutButton";
 import MenuItem from "@/components/MenuItem";
@@ -20,6 +21,8 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
+  const { createCheckoutSession, isLoading: isCheckoutLoading } =
+    useCreateCheckoutSession();
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
     return storedCartItems ? JSON.parse(storedCartItems) : [];
@@ -102,10 +105,29 @@ const DetailPage = () => {
       return updatedCartItems;
     });
   };
-  const onCheckout=(UserFormData:UserFormData)=>{
-    console.log("hi")
+  const onCheckout = async (UserFormData: UserFormData) => {
+    if (!restaurant) {
+      return;
+    }
 
-  }
+    const checkoutData = {
+      cartItems: cartItems.map((cartItem) => ({
+        menuItemId: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity.toString(),
+      })),
+      restaurantId: restaurant._id,
+      deliveryDetails: {
+        name: UserFormData.name,
+        email: UserFormData.email as string,
+        addressLine1: UserFormData.addressLine1,
+        city: UserFormData.city,
+      },
+    };
+
+    const data = await createCheckoutSession(checkoutData);
+    window.location.href = data.url;
+  };
   if (isLoading || !restaurant) {
     return "Loading...";
   }
@@ -138,7 +160,11 @@ const DetailPage = () => {
               decrementCart={decrementCart}
             />
             <CardFooter>
-              <CheckoutButton disabled={cartItems.length===0} onCheckout={onCheckout}/>
+              <CheckoutButton
+                disabled={cartItems.length === 0}
+                onCheckout={onCheckout}
+                isLoading={isCheckoutLoading}
+              />
             </CardFooter>
           </Card>
         </div>
