@@ -19,7 +19,7 @@ export const jwtCheck = auth({
   });
 
   export const jwtParse=async(req:Request,res:Response,next:NextFunction)=>{
-    console.log("hello iam parse")
+    // console.log("hello iam parse")
     // console.log(req.body)
     // console.log(req.headers)
     const {authorization}= req.headers;

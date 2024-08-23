@@ -9,7 +9,7 @@ import restaurantRoute from "./routes/RestaurantRoute";
 import orderRoute from "./routes/OrderRoute";
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).then(() => {
-  console.log("connected to mongodb");
+  // console.log("connected to mongodb");
 });
 
 cloudinary.config({
@@ -33,5 +33,5 @@ app.use("/api/restaurant", restaurantRoute);
 app.use("/api/order", orderRoute);
 
 app.listen(7000, () => {
-  console.log("server started on PORT 7000");
+  // console.log("server started on PORT 7000");
 });

@@ -39,7 +39,7 @@ const createMyRestaurant = async (req: Request, res: Response) => {
 };
 
 const updateMyRestaurant = async (req: Request, res: Response) => {
-  console.log("Hello from updateRestaurant");
+  // console.log("Hello from updateRestaurant");
   try {
     const restaurant = await Restaurant.findOne({ user: req.userId });
     if (!restaurant) {
