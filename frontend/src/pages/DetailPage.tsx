@@ -75,15 +75,10 @@ const DetailPage = () => {
     setCartItems((prevCartItems) => {
       const updatedCartItems = prevCartItems
         .map((prevCartItem) => {
-          if (prevCartItem._id === cartItem._id) {
-            if (prevCartItem.quantity > 1) {
-              return { ...prevCartItem, quantity: prevCartItem.quantity - 1 };
-            } else {
-              return null;
-            }
-          } else {
-            return prevCartItem;
+          if (prevCartItem._id === cartItem._id && prevCartItem.quantity > 1) {
+            return { ...prevCartItem, quantity: prevCartItem.quantity - 1 };
           }
+          return prevCartItem;
         })
         .filter((prevCartItem) => prevCartItem !== null);
       sessionStorage.setItem(
